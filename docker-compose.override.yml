@@ -10,7 +10,7 @@ services:
     volumes:
       - ./:/opt/webapp
     ports:
-      - "8000:8000"
+      - "8000:${PORT}"
   postgres:
     environment:
       - POSTGRES_DB=postgres
