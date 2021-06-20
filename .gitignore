@@ -1,0 +1,13 @@
+*.pyc
+env/
+.terraform
+.env
+staticfiles/
+postgres-data/
+.idea
+bin
+lib
+include
+postgres-data
+.DS_Store
+include
