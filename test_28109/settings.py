@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import datetime
 
 from pathlib import Path
 import os
@@ -38,8 +39,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'automations',
+    # 'django.contrib.sites'
 ]
+LOCAL_APPS = [
+    "users",
+    'timesheets',
+    # 'chat',
+    # 'Alerts',
+    'calendars',
+    'patients',
+    'automations',
+    'permissions',
+    "tasks",
+    'Functions.make_fields_permissions.YourAppConfig',
+]
+THIRD_PARTY_APPS = [
+    # 'channels',
+    'rest_framework',
+    # 'corsheaders',
+    'drf_yasg',
+    'safedelete',
+    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_swagger',
+    'address',
+    # 'django_extensions',
+    # 'drf_yasg',
+    # 'storages',
+
+]
+
+INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +80,67 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'drf_renderer_xlsx.renderers.XLSXRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    # "USER_DETIALS_SERLIZER": 'users.serlizer.UserSerializer',
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework.filters.SearchFilter',
+    ),
+}
+
+AUTH_USER_MODEL = "users.User"
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(weeks=9999),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(weeks=9999),
+    # 'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
+    # 'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1),
+}
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'test_28109.urls'
