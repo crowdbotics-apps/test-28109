@@ -51,7 +51,7 @@ LOCAL_APPS = [
     'automations',
     'permissions',
     "tasks",
-    'Functions.make_fields_permissions.YourAppConfig',
+    # 'Functions.make_fields_permissions.YourAppConfig',
 ]
 THIRD_PARTY_APPS = [
     # 'channels',

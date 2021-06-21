@@ -11,3 +11,4 @@ include
 postgres-data
 .DS_Store
 include
+db.sqlite3
