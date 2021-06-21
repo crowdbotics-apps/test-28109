@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM python:3
 
 ENV LANG C.UTF-8
 ARG DEBIAN_FRONTEND=noninteractive
@@ -9,14 +9,12 @@ RUN apt-get update \
   && apt-get install -y python3.7-dev python3-pip libpq-dev curl \
   && apt-get clean all \
   && rm -rf /var/lib/apt/lists/*
-  # You can add additional steps to the build by appending commands down here using the
-  # format `&& <command>`. Remember to add a `\` at the end of LOC 12.
-  # WARNING: Changes to this file may cause unexpected behaviors when building the app.
-  # Change it at your own risk.
-#x
+
 WORKDIR /opt/webapp
 COPY . .
-RUN pip3 install --no-cache-dir -q 'pipenv==2018.11.26' && pipenv install --deploy --system
+RUN pip install -r requirements.txt
+
+#RUN pip3 install --no-cache-dir -q 'pipenv==2018.11.26' && pipenv install --deploy --system
 RUN python3 manage.py collectstatic --no-input
 
 # Run the image as a non-root user
