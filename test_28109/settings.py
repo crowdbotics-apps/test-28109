@@ -16,6 +16,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -52,7 +53,7 @@ LOCAL_APPS = [
     'Functions.make_fields_permissions.YourAppConfig',
 ]
 THIRD_PARTY_APPS = [
-    # 'channels',
+    'channels',
     'rest_framework',
     # 'corsheaders',
     'drf_yasg',
@@ -158,6 +159,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'test_28109.wsgi.application'
+ASGI_APPLICATION = "test_28109.asgi.application"
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -218,3 +221,14 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'crowboticstest@gmail.com'
 EMAIL_HOST_PASSWORD = 'crowbotics123@1'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        # "BACKEND": "channels.layers.InMemoryChannelLayer",
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

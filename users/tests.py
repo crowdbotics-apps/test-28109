@@ -1,6 +1,8 @@
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APITestCase
 
+from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
 from email.message import EmailMessage
 
@@ -8,35 +10,18 @@ from email.message import EmailMessage
 # EMAIL_PORT = 587
 # EMAIL_HOST_USER = 'crowboticstest@gmail.com'
 # EMAIL_HOST_PASSWORD = 'crowbotics123@1'
+from users.models import User
+
 
 class AuthTestings(APITestCase):
-    def setUp(self):
-        tests_setup_function(self)
-        self.register_data = {'email': 'Clover@g.com', 'username': 'Clover',
-                              'password': 'password', 'password2': 'password', }
-        self.login_data = {'username': 'Clover',
-                           'password': 'password'}
-
-    register_url = reverse('register')
-    login_url = reverse('login')
-    logout_url = reverse('logout')
-    token_refresh_url = reverse('token_refresh')
-    verfy_token_url = reverse('verfy_token')
-    reset_email_url = reverse('request-reset-email')
-    email_verify_url = reverse('email-verify')
-    all_users_url = reverse('all_users')
-    user_url = '/users/verify_email/1'
-
+    # def setUp(self):
+        # tests_setup_function(self)
     def test_verfy_email(self):
         pass
+        # self.register_data['email'] = api.rondomeemail
+        # response = self.client.post('users/register/', self.register_data, format='json')
 
-
-    # def test_register(self):
-    #     response = self.client.post(
-    #         self.register_url, self.register_data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #     self.assertEqual(User.objects.count(), 1)
-    #     self.assertEqual(User.objects.get(id=1).username, 'Clover')
+        # response = self.client.post('users/verify_email/', self.register_data, format='json')
 
     # def test_api_jwt_and_permissions_and_users(self):
     #     assert User.objects.count() == 0

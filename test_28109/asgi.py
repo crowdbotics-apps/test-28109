@@ -1,16 +1,30 @@
-"""
-ASGI config for test_28109 project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
-"""
-
-import os
-
+from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_28109.settings')
+from Functions.get_user import get_user
+from Alerts.routing import websocket_urlpatterns
 
-application = get_asgi_application()
+
+# from jwt import decode
+
+
+# TODO encode and decode the jwt_token
+
+
+class QueryAuthMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        scope['user'] = await get_user(scope["query_string"])
+        return await self.app(scope, receive, send)
+
+
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": QueryAuthMiddleware(
+        URLRouter(
+            websocket_urlpatterns
+        )
+    ),
+})
