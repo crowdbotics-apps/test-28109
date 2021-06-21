@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import datetime
+import environ
+import logging
+
+env = environ.Env()
 
 from pathlib import Path
 import os
@@ -171,6 +175,21 @@ DATABASES = {
         'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
+# if env.str("DATABASE_URL", default=None):
+#     print('========================== docker mode ==========================')
+#     DATABASES = {
+# 'default': env.db()
+#     }
+# else:
+#     print('========================== classic mode ==========================')
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         }
+#     }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

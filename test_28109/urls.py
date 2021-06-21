@@ -22,7 +22,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', include_docs_urls(title='My API title')),
+    path('', include_docs_urls(title='Vytrac', description='Vytrac-api is a hospital management and autoamtion api')),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('calendars/', include('calendars.urls')),

@@ -41,6 +41,83 @@ class Postser(DynamicSerializer):
 
 class StatsticsView(ItemsView):
     def get(self, request, *args, **kwargs):
+        """
+        - # quick example
+            1. `"http://vytrac/statistics/?column__name=oxgyn&&field_value__lt=80"`
+                -         here you will get only the users with a history of oxygen level that reached under 80
+            2. `"http://vytrac/statistics/?column__name=oxgyn&&field_value__lt=80&date_created__gt=2021-06-09"`
+                - now instead of getting all the users with a history of low oxygen, will get only the users that have currently or last measurement bellow 80
+            3. `"http://vytrac/statistics/?column__name=oxgyn&cal=min&number=10"`
+                - you will get the 10 peaks of oxygen values
+            4. `"http://vytrac/statistics/?column__name=see_alerts&cal=duration"`
+                - You will get how long the user spend before seeing each alert
+                - Logic: calculate the time spent to change the value of the field `is_seen` from `false` to `true`
+        ## the list view that look like the following as been sacrificed for the sake of aggregation and flexibility
+            - ```
+            [{
+            "name": "blood pressure",
+            "user": 1,
+            "column": [{
+            "field_value": "22",
+            "name": "ccc",
+            "action": "added",
+            "seen_by": [1],
+            "date_created": "2021-06-09T10:42:41.458057Z"
+            }, {
+            "field_value": "44",
+            "name": "ddd",
+            "action": "added",
+            "seen_by": [],
+            "date_created": "2021-06-09T10:42:56.582589Z"
+            }]
+            }, {
+            "name": "oxgyn",
+            "user": 1,
+            "column": [{
+            "field_value": "11",
+            "name": "",
+            "action": "",
+            "seen_by": [],
+            "date_created": "2021-06-09T10:43:11.271641Z"
+            }]
+            }]
+            ```
+        ## the aggrigaction friendly view
+            - ```javascript
+                [{
+                "field_value": "22",
+                "name": "ccc",
+                "action": "added",
+                "seen_by": [1],
+                "date_created": "2021-06-09T10:42:41.458057Z",
+                "column": {
+                "name": "blood pressure",
+                "user": 1
+                }
+                }, {
+                "field_value": "44",
+                "name": "ddd",
+                "action": "added",
+                "seen_by": [],
+                "date_created": "2021-06-09T10:42:56.582589Z",
+                "column": {
+                "name": "blood pressure",
+                "user": 1
+                }
+                }, {
+                "field_value": "11",
+                "name": "",
+                "action": "",
+                "seen_by": [],
+                "date_created": "2021-06-09T10:43:11.271641Z",
+                "column": {
+                "name": "oxgyn",
+                "user": 1
+                }
+                }]
+                ```
+        """
+
         data = super().get(request, *args, **kwargs).data
         getter = request.GET
 
