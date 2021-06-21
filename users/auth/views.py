@@ -14,8 +14,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import UntypedToken
 
 ##
+from Functions.debuging import Debugging
 from . import serializers
 from ..models import User
 from ..utils import Util
@@ -34,8 +36,7 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
-        link = 'http://' + current_site + relativeLink + \
-               "?test=" + 'text______' + "?token=" + str(token)
+        link = 'http://' + current_site + relativeLink + "?token=" + str(token)
         email_body = render_to_string(
             "verify_email.html", {'name': user.username, 'link': link})
         data = {'email_body': email_body, 'to_email': user.email,
@@ -82,17 +83,23 @@ class VerifyEmail(APIView):
 
     @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
+
         token = request.GET.get('token')
+
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY)
-            user = User.objects.get(id=payload['user_id'])
+            token_data = UntypedToken(token)
+
+            user = User.objects.get(id=token_data["user_id"])
+
             if (user.is_email_verified):
                 return HttpResponseRedirect(redirect_to='https://google.com')
 
             if not user.is_email_verified:
                 user.is_email_verified = True
                 user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+            return Response(
+                {'email': 'The user "' + user.username + '" is successfully activated the email ' + user.email},
+                status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
@@ -145,4 +152,3 @@ class LogoutView(generics.GenericAPIView):
         except Exception as e:
             return Response({"error": 'Refresh token alread blacklisted or invialid.'},
                             status=status.HTTP_400_BAD_REQUEST)
-

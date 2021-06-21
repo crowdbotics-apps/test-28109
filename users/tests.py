@@ -1,15 +1,17 @@
 from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from Functions.Permissions import get_permission_id
-from Functions.debuging import Debugging
-from users.models import User
+from Functions.tests_credentials import tests_setup_function
+from email.message import EmailMessage
 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'crowboticstest@gmail.com'
+# EMAIL_HOST_PASSWORD = 'crowbotics123@1'
 
 class AuthTestings(APITestCase):
     def setUp(self):
+        tests_setup_function(self)
         self.register_data = {'email': 'Clover@g.com', 'username': 'Clover',
                               'password': 'password', 'password2': 'password', }
         self.login_data = {'username': 'Clover',
@@ -24,6 +26,10 @@ class AuthTestings(APITestCase):
     email_verify_url = reverse('email-verify')
     all_users_url = reverse('all_users')
     user_url = '/users/verify_email/1'
+
+    def test_verfy_email(self):
+        pass
+
 
     # def test_register(self):
     #     response = self.client.post(
