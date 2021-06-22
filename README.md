@@ -23,18 +23,6 @@ The end points that are not documeted in swagger.
     * You wont need **DELTE** becuase this data will be immutable
     * You wont need **POST** because billes data will be created automaticly after a user request a servce.
 
-1. `/alerts/` "convential I should name it notifcations"
-    
-    - **onmessage**
-    ```
-    
-    ```
-    
-    - **send**
-    ```
-    {target:'events', id:1, is_seen:true}
-    ```
-    
 1.  `/statistics/`
     
     - quick example "http://vytrac/statistics/?column__name=oxgyn&&field_value__lt=80"

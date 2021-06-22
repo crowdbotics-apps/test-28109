@@ -48,13 +48,13 @@ LOCAL_APPS = [
     "users",
     'timesheets',
     # 'chat',
-    # 'Alerts',
+    'Alerts',
     'calendars',
     'patients',
     'automations',
     'permissions',
     "tasks",
-    'Functions.make_fields_permissions.YourAppConfig',
+    'Functions.MyAppsConfig.YourAppConfig',
 ]
 THIRD_PARTY_APPS = [
     'channels',
@@ -72,7 +72,7 @@ THIRD_PARTY_APPS = [
 ]
 
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
-
+# SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -169,25 +169,19 @@ ASGI_APPLICATION = "test_28109.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+if env.str("DATABASE_URL", default=None):
+    print('========================== docker mode ==========================')
+    DATABASES = {
+'default': env.db()
     }
-}
-# if env.str("DATABASE_URL", default=None):
-#     print('========================== docker mode ==========================')
-#     DATABASES = {
-# 'default': env.db()
-#     }
-# else:
-#     print('========================== classic mode ==========================')
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         }
-#     }
+else:
+    print('========================== classic mode ==========================')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 

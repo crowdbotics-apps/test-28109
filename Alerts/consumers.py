@@ -4,7 +4,7 @@ from urllib.parse import parse_qs
 from channels.generic.websocket import WebsocketConsumer
 from channels.testing import ChannelsLiveServerTestCase
 from django.contrib.auth.models import AnonymousUser
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
@@ -18,17 +18,11 @@ from users import models
 from users.models import User
 
 
-class Myser(QueryFieldsMixin, serializers.ModelSerializer):
+class UserSer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ['username', 'id', 'events']
         depth = 1
-
-
-class Eventser(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = '__all__'
 
 
 def return_notifcations(scope):
@@ -44,7 +38,7 @@ def return_notifcations(scope):
     if user:
         if not user.is_staff or not user.is_superuser:
             users = users.filter(id=user.id)
-    serializer = Myser(users, many=True)
+    serializer = UserSer(users, many=True)
     return json.dumps(serializer.data)
 
 
@@ -69,15 +63,40 @@ class Alerts(WebsocketConsumer):
             self.send('You are not authenticated')
             super().disconnect(self)
 
-        @receiver(post_save, sender=Patient)
-        @receiver(post_save, sender=Event)
-        def __init__(sender, instance, created, **kwargs):
-            if sender.__name__ == 'Event':
+        @receiver(pre_save, sender=Patient)
+        @receiver(pre_save, sender=Event)
+        def __init__(sender, instance, **kwargs):
+            model = None
+            fields = None
+            messages = []
+            # Debugging(instance.score, color='green')
+            from django.apps import apps
+            Model = apps.get_model(instance._meta.app_label, sender.__name__)
+
+            class MySer(serializers.ModelSerializer):
+                class Meta:
+                    model = Model
+                    fields = '__all__'
+
+            try:
+                model = Model.objects.get(id=instance.id)
+            except:
                 pass
-                # self.send(Eventser(instance,many=False).data)
-            # Debugging(User.objecs.fields(events__title='ddd'), color='green')
-            self.send('test update')
-            self.send(return_notifcations(self.scope))
+            serializer = MySer(instance, many=False)
+            data = serializer.data
+            if model:
+                olddata = MySer(model, many=False).data
+                for key in olddata.keys():
+                    if key != 'id' and data[key] == olddata[key]:
+                        #TODO why ralatoinal data like users, seen_by changes dn't apera?
+                        data.pop(key)
+                messages.append({'updated': 'true'})
+            else:
+                messages.append({'created': 'true'})
+            messages.append({'model_name': sender.__name__})
+            messages = {"data":data, "messages": messages}
+            data = json.dumps(messages)
+            self.send(data)
 
         self.send(return_notifcations(self.scope))
 

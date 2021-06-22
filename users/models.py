@@ -88,7 +88,7 @@ class User(AbstractUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     receive_newsletter = models.BooleanField(default=False)
     birth_date = models.DateTimeField(blank=True, null=True)
-    address = models.CharField(max_length=300, blank=True, null=True)
+    address = AddressField(related_name='+', blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
     about_me = models.TextField(max_length=500, blank=True, null=True)
     phone_number = models.TextField(
@@ -103,7 +103,6 @@ class User(AbstractUser, PermissionsMixin):
     settings = models.ManyToManyField(
         Settings, related_name='who_can_see_comment', blank=True)
     age = models.CharField(max_length=50, blank=True)
-    address = AddressField(related_name='+', blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]

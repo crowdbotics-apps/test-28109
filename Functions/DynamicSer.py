@@ -1,8 +1,6 @@
 from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
-
 from Functions.Permissions import permision_chack
-from Functions.debuging import Debugging
 
 
 class DynamicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
@@ -24,7 +22,6 @@ class DynamicSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             is_owner = request.is_owner
         except:
             pass
-
 
         if not is_owner and len(method) > 0:
             permission = permision_chack(method, modelname, user)
