@@ -13,3 +13,4 @@ postgres-data
 include
 db.sqlite3
 requirements.txt
+.DS_Store
