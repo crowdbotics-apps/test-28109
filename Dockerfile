@@ -12,7 +12,7 @@ RUN apt-get update \
 WORKDIR /opt/webapp
 COPY . .
 #RUN pip install -r requirements.txt
-RUN pip install -no-cache-dir -q pipenv
+RUN pip install pipenv
 RUN pipenv install --deploy --system
 RUN python3 manage.py collectstatic --no-input
 
