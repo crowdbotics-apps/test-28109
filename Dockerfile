@@ -11,14 +11,13 @@ RUN apt-get update \
 
 WORKDIR /opt/webapp
 COPY . .
-RUN pip install -r requirements.txt
-
-#RUN pip3 install --no-cache-dir -q 'pipenv==2018.11.26' && pipenv install --deploy --system
+#RUN pip install -r requirements.txt
+RUN pip install -no-cache-dir -q pipenv
+RUN pipenv install --deploy --system
 RUN python3 manage.py collectstatic --no-input
 
 RUN adduser --disabled-password --gecos "" django
 USER django
-RUN /opt/webapp/manage.py makemigrations
 
 #su - django
 #whoami
