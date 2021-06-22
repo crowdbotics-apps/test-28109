@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 LOCAL_APPS = [
     "users",
     'timesheets',
+    'trash',
     # 'chat',
     'Alerts',
     'calendars',
