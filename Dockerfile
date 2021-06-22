@@ -18,6 +18,8 @@ RUN python3 manage.py collectstatic --no-input
 
 RUN adduser --disabled-password --gecos "" django
 USER django
+RUN /opt/webapp/manage.py makemigrations
+
 #su - django
 #whoami
 #RUN chmod -R 777 /usr/lib/python3/dist-packages/
