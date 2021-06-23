@@ -4,7 +4,7 @@ from rest_framework import generics
 
 class AlertsView(generics.ListAPIView):
     """
-    #`ws://domain/alerts/`
+    #`ws://domain/alerts/?token=<token>`
     <h1 class="label label-primary">connect</h1>
     - "convential I should name it notifcations"
 
