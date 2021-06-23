@@ -1,3 +1,4 @@
+from django.conf.urls import url
 
 from .consumers import Alerts
 from django.urls import path

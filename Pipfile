@@ -89,6 +89,7 @@ pyOpenSSL = "==20.0.1"
 PyYAML = "==5.4.1"
 Twisted = "==21.2.0"
 django = "*"
+channels-redis = "*"
 
 [dev-packages]
 

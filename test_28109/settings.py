@@ -18,6 +18,7 @@ env = environ.Env()
 from pathlib import Path
 import os
 
+is_deploied = env.str("DATABASE_URL", default=None)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
@@ -60,7 +61,7 @@ LOCAL_APPS = [
 THIRD_PARTY_APPS = [
     'channels',
     'rest_framework',
-    # 'corsheaders',
+    'corsheaders',
     'drf_yasg',
     'safedelete',
     'rest_framework_simplejwt.token_blacklist',
@@ -166,14 +167,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'test_28109.wsgi.application'
 ASGI_APPLICATION = "test_28109.asgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if env.str("DATABASE_URL", default=None):
+if is_deploied:
     print('========================== docker mode ==========================')
     DATABASES = {
-'default': env.db()
+        'default': env.db()
     }
 else:
     print('========================== classic mode ==========================')
@@ -233,7 +233,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
@@ -241,13 +240,14 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'crowboticstest@gmail.com'
 EMAIL_HOST_PASSWORD = 'crowbotics123@1'
 
-
+host = os.environ.get('REDIS_URL', 'redis://localhost:6379') if is_deploied else [
+    ('127.0.0.1', 6379)]
 CHANNEL_LAYERS = {
     'default': {
         # "BACKEND": "channels.layers.InMemoryChannelLayer",
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": host,
         },
     },
 }

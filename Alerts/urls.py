@@ -1,5 +1,6 @@
 from django.urls import path
 from rest_framework import generics
+from .views import alertsRules, SeenBy
 
 
 class AlertsView(generics.ListAPIView):
@@ -17,11 +18,15 @@ class AlertsView(generics.ListAPIView):
         ```
     - note quereis and filters als work here.
     """
-
     pass
 
 
 urlpatterns = [
     # path('', admin.site.urls),
     path('', AlertsView.as_view(), name='alerts view'),
+    path('rules/', alertsRules.Views.as_view(), name='alerts rules'),
+    path('rules/<int:pk>/', alertsRules.View.as_view(), name='alerts rule'),
+
+    path('seen_by/', SeenBy.Views.as_view(), name='SeenBys'),
+    path('seen_by/<int:pk>/', SeenBy.View.as_view(), name='SeenBy'),
 ]

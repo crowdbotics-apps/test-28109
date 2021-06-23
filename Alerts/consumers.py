@@ -10,6 +10,7 @@ from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import UntypedToken
 
+from Alerts.models import SeeAlert
 from Functions.debuging import Debugging
 from Functions.queryset_filtering import queryset_filtering
 from calendars.models import Event
@@ -69,7 +70,7 @@ class Alerts(WebsocketConsumer):
             model = None
             fields = None
             messages = []
-            # Debugging(instance.score, color='green')
+            # SeeAlert.objects.create(model=sender.__name__,object_id=instance.id)
             from django.apps import apps
             Model = apps.get_model(instance._meta.app_label, sender.__name__)
 
