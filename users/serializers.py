@@ -67,5 +67,5 @@ class UpdateUsersSerializer(DynamicSerializer):
                   "second_phone_number",
                   "imageUrl",
                   "age",
-                  "address"
+                  # "address"
                   ]

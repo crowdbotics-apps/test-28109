@@ -1,5 +1,5 @@
 # noinspection PyPackageRequirements
-from address.models import AddressField
+# from address.models import AddressField
 from django.conf import settings
 from django.db import models
 from safedelete.models import SafeDeleteModel
@@ -59,7 +59,7 @@ class PrimaryCarePhysician(SafeDeleteModel):
     full_name = models.CharField(max_length=50, blank=True)
     phone_number = models.TextField(
         max_length=500, blank=True, null=True, validators=[PHONE_NUMBER_REGEX])
-    address = AddressField(related_name='PCP+', blank=True, null=True)
+    # address = AddressField(related_name='PCP+', blank=True, null=True)
     office_phone = models.TextField(
         max_length=500, blank=True, null=True, validators=[PHONE_NUMBER_REGEX])
     office_fax = models.CharField(max_length=50, blank=True)

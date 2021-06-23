@@ -22,7 +22,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', include_docs_urls(title='Vytrac', description='Vytrac-api is a hospital management and autoamtion api')),
+    path('', include_docs_urls(title='Vytrac',description='All endpoints have filtering functionalities like fieldName__gte=<val>, fieldName__contains=<str>, fieldName__subfieldName__gte=<val>, also you can add "latest=true, earlist=true to get the laties/earlist object')),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('calendars/', include('calendars.urls')),

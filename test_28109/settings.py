@@ -65,7 +65,7 @@ THIRD_PARTY_APPS = [
     'safedelete',
     'rest_framework_simplejwt.token_blacklist',
     # 'rest_framework_swagger',
-    'address',
+    # 'address',
     # 'django_extensions',
     # 'drf_yasg',
     # 'storages',

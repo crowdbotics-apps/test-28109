@@ -47,6 +47,8 @@ class StatsticsView(ItemsView):
                 -         here you will get only the users with a history of oxygen level that reached under 80
             2. `"http://vytrac/statistics/?column__name=oxgyn&&field_value__lt=80&date_created__gt=2021-06-09"`
                 - now instead of getting all the users with a history of low oxygen, will get only the users that have currently or last measurement bellow 80
+                - instead of `date_created__gt=2021-06-09` you can say `latest=true` which returns a list of a single object
+
             3. `"http://vytrac/statistics/?column__name=oxgyn&cal=min&number=10"`
                 - you will get the 10 peaks of oxygen values
             4. `"http://vytrac/statistics/?column__name=see_alerts&cal=duration"`

@@ -1,5 +1,5 @@
 # noinspection PyPackageRequirements
-from address.models import AddressField
+# from address.models import AddressField
 from django.conf import settings
 from django.contrib.auth.models import User, AbstractUser, PermissionsMixin
 from django.core.validators import RegexValidator
@@ -88,7 +88,7 @@ class User(AbstractUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     receive_newsletter = models.BooleanField(default=False)
     birth_date = models.DateTimeField(blank=True, null=True)
-    address = AddressField(related_name='+', blank=True, null=True)
+    # address = AddressField(related_name='+', blank=True, null=True)
     city = models.CharField(max_length=30, blank=True, null=True)
     about_me = models.TextField(max_length=500, blank=True, null=True)
     phone_number = models.TextField(
