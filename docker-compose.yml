@@ -8,4 +8,4 @@ services:
   postgres:
     image: postgres:12
   redis:
-    image: redis:5
+    image: redis

@@ -2,11 +2,10 @@
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
-from django.contrib.auth.models import AnonymousUser
+# from django.contrib.auth.models import AnonymousUser
 # from jwt import decode
 from rest_framework_simplejwt.tokens import UntypedToken
 
-from Functions.debuging import Debugging
 from users.models import User
 
 
@@ -18,4 +17,4 @@ def get_user(querys):
     try:
         return User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return AnonymousUser()
+        return False

@@ -170,26 +170,26 @@ ASGI_APPLICATION = "test_28109.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if is_deploied:
-    print('========================== docker mode ==========================')
-    DATABASES = {
-        'default': env.db()
-    }
-else:
-    print('========================== classic mode ==========================')
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-
-# DATABASES = {
+# if is_deploied:
+#     print('========================== docker mode ==========================')
+#     DATABASES = {
+#         'default': env.db()
+#     }
+# else:
+#     print('========================== classic mode ==========================')
+#     DATABASES = {
 #         'default': {
 #             'ENGINE': 'django.db.backends.sqlite3',
 #             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #         }
 #     }
+
+DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

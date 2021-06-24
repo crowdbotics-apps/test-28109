@@ -2,21 +2,16 @@ import json
 from urllib.parse import parse_qs
 
 from channels.generic.websocket import WebsocketConsumer
-from channels.testing import ChannelsLiveServerTestCase
-from django.contrib.auth.models import AnonymousUser
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import UntypedToken
 
-from Alerts.models import SeeAlert
 from Functions.debuging import Debugging
 from Functions.queryset_filtering import queryset_filtering
 from calendars.models import Event
 from patients.models import Patient
 from users import models
-from users.models import User
 
 
 class UserSer(QueryFieldsMixin, serializers.ModelSerializer):
@@ -42,15 +37,6 @@ def return_notifcations(scope):
     serializer = UserSer(users, many=True)
     return json.dumps(serializer.data)
 
-
-def get_user(querys):
-    token = parse_qs(querys.decode("utf8"))['token'][0]
-    token_data = UntypedToken(token)
-    user_id = token_data["user_id"]
-    try:
-        return User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        return AnonymousUser()
 
 
 class Alerts(WebsocketConsumer):

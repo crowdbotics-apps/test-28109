@@ -115,4 +115,3 @@ The end points that are not documeted in swagger.
 ```
 $ docker-compose up
 ```
-
