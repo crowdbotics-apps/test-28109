@@ -22,4 +22,4 @@ RUN adduser --disabled-password --gecos "" django
 USER django
 
 CMD daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
-#gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT &&
+#CMD gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT

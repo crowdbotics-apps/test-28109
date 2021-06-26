@@ -92,13 +92,13 @@ models = []
 try:
     from django.contrib.contenttypes.models import ContentType
     # then_item = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    from django.apps import apps
+    # from django.apps import apps
     for alert in AlertsRules.objects.all():
         sender_name = re.findall(r"(.+?)_(.+)", alert.model)
         app_name = sender_name[0][0]
         model_name = sender_name[0][1]
-        model = apps.get_model(app_name, model_name)
-        models.append(model)
+        # model = apps.get_model(app_name, model_name)
+        # models.append(model)
 except:
     ic('there are no migrations yet')
 

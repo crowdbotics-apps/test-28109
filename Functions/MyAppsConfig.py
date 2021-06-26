@@ -13,8 +13,6 @@ class YourAppConfig(AppConfig):
         from django.contrib.contenttypes.models import ContentType
         from django import apps
         from users.models import User
-        class Alert(models.Model):
-            pass
 
         try:
             # Dummy data
@@ -24,11 +22,7 @@ class YourAppConfig(AppConfig):
             pass
 
         try:
-            Permission.objects.get_or_create(
-                codename='view_alert',
-                name="Can view alert",
-                content_type=ContentType.objects.get_for_model(Alert)
-            )
+
             for Model in apps.apps.get_models():
                 make_fields_permissions(Permission, ContentType, Model)
         except:

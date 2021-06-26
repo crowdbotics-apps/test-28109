@@ -2,7 +2,6 @@ import re
 
 from colorama import Fore, Back
 from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 
 from Functions.make_fields_permissions import make_fields_permissions
 
@@ -71,6 +70,7 @@ def get_permission_id(name, Model):
     if "Can" not in name:
         print(Fore.BLUE + Back.RED + '============ name error ============')
     id = None
+    from django.contrib.contenttypes.models import ContentType
     content_type = ContentType.objects.get_for_model(Model)
 
     try:
