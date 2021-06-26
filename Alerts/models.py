@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from django.apps import apps
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
@@ -90,6 +90,9 @@ def __init__(sender, instance, **kwargs):
 
 models = []
 try:
+    from django.contrib.contenttypes.models import ContentType
+    # then_item = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    from django.apps import apps
     for alert in AlertsRules.objects.all():
         sender_name = re.findall(r"(.+?)_(.+)", alert.model)
         app_name = sender_name[0][0]

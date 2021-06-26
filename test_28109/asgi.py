@@ -6,10 +6,7 @@ from Alerts.routing import websocket_urlpatterns
 
 
 # from jwt import decode
-
-
 # TODO encode and decode the jwt_token
-
 
 class QueryAuthMiddleware:
     def __init__(self, app):
