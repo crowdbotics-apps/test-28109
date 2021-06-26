@@ -2,9 +2,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from Functions.tests_credentials import tests_setup_function
-import mailslurp_client
-
 from users.models import User
 from users.utils import Util
 

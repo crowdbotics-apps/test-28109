@@ -1,4 +1,5 @@
 ##
+from icecream import ic
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
@@ -7,6 +8,7 @@ from Functions.Permissions import permision_chack, get_user_permissions
 ##
 from users import serializers
 from .models import User
+from .serializers import UserSerForAddmin
 
 
 class WhoCanView(permissions.BasePermission):
@@ -35,12 +37,10 @@ class UserView(ItemView):
         user = self.request.user
         permissions = get_user_permissions(user)
         is_permited = 'add_user' or 'update_user' or 'update_email' in permissions
-        # ?TODO test is_permited and is not permited
-        if permissions or not user.is_staff or not user.is_superuser:
+        if not (is_permited or user.is_staff or user.is_superuser):
             self.serializer_class = serializers.UpdateUsersSerializer
-            # if 'email' in self.request.data:
-                # TODO send to the admins a request to update to this email
-                # Debugging(self.request.data, color='green')
+        else:
+            self.serializer_class = UserSerForAddmin
         return super().put(*args,**kwargs)
 
 class UsersView(ItemsView):

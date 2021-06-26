@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.models import Group
 from faker import Faker
+from icecream import ic
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -122,16 +123,14 @@ class AuthTestings(APITestCase):
         self.assertEqual(userI.email, userF.email)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    #TODO def test_can_change_email(self):
-    #     #TODO self.user.user_permissions.add(get_permission_id('Can change email', User))
-    #     self.user.is_superuser = True
-    #     self.user.save()
-    #
-    #     userI = User.objects.get(id=1)
-    #     resp = self.client.put('/users/1/', {'username': 'updated', 'password': 'password', 'email': 'Alex@g.com'})
-    #     userF = User.objects.get(id=1)
-    #     Debugging(resp.data, color='green')
-    #     self.assertNotEqual(userI.email, userF.email)
+    def test_can_change_email(self):
+        self.user.is_superuser = True
+        self.user.save()
+
+        userI = User.objects.get(id=1)
+        resp = self.client.put('/users/1/', {'username': 'updated', 'password': 'password', 'email': 'newfakeemail@g.com'})
+        userF = User.objects.get(id=1)
+        self.assertNotEqual(userI.email, userF.email)
 
     def test_permission_to_put(self):
         self.user.user_permissions.clear()
@@ -146,7 +145,10 @@ class AuthTestings(APITestCase):
         resp = self.client.put('/users/2/', {'username': 'updated', 'password': 'password'})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-    def test_more(self):
+    def test_can_change(self):
+        resp = self.client.put('/users/1/', {'username': 'updated', 'password': 'password'})
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
         self.user.user_permissions.add(get_permission_id('Can change user', User))
         self.user.save()
         resp = self.client.put('/users/1/', {'username': 'updated', 'password': 'password'})

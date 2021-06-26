@@ -73,7 +73,8 @@ class User(AbstractUser, PermissionsMixin):
     username = models.CharField(
         max_length=30, unique=True, validators=[USERNAME])
     email = models.EmailField(max_length=250, unique=True)
-    secon_email = models.EmailField(max_length=250, blank=True,unique=True)
+    secon_email = models.EmailField(max_length=250, blank=True)
+    # unique=True #TODO
 
     sex = models.ManyToManyField(Sex, related_name='user_sex', blank=True)
     first_name = models.CharField(max_length=30, blank=True, null=True)

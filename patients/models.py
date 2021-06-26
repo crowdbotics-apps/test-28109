@@ -80,6 +80,11 @@ class Race(models.Model):
 class Religion(models.Model):
     name = models.CharField(max_length=50, blank=True)
 
+class SymptomsHistory(SafeDeleteModel):
+    symptom = models.OneToOneField(Symptom,on_delete=models.DO_NOTHING)
+    date_created = models.DateTimeField(auto_now_add=True)
+#TODO     make it easy to create in serializer
+# TODO make spaling check
 
 class Patient(SafeDeleteModel):
     # https://www.django-rest-framework.org/api-guide/relations/#generic-relationships
@@ -94,7 +99,8 @@ class Patient(SafeDeleteModel):
         on_delete=models.CASCADE,
         primary_key=False,
     )
-
+    symptoms = models.ManyToManyField(
+        SymptomsHistory, related_name='Profileother_langauge', blank=True)
     other_langauge = models.ManyToManyField(
         Language, related_name='Profileother_langauge', blank=True)
     gender_identity = models.CharField(max_length=50, blank=True)
@@ -157,7 +163,6 @@ class Patient(SafeDeleteModel):
         on_delete=models.CASCADE,
         primary_key=False,
     )
-    # TODO prescriptions, symptoms make them timesheet
 
     class Meta:
         get_latest_by = 'date_created'

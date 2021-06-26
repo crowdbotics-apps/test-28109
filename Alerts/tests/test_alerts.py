@@ -4,9 +4,11 @@ import json
 import websockets
 from channels.testing import WebsocketCommunicator
 from django.conf import settings
+from icecream import ic
 from rest_framework.test import APITestCase
 
 from Alerts.consumers import AlertsChannle
+from Alerts.models import Alerts
 from Functions.tests_credentials import tests_setup_function
 from calendars.models import DateType, Event
 from unittest import TestCase
@@ -82,8 +84,16 @@ class AlertsTests(APITestCase):
         obj3.users.set([self.user, self.user3])
         obj3.save()
         self.all_dates = Event.objects.all().count()
-        # if request(f'ws://localhost:8000/alerts/?token={self.token}&x=xxx'):
-        #     self.fail('server is not runing')
+
+    def test_rules(self):
+        intial= Alerts.objects.count()
+        x = Event.objects.create(created_by=self.user)
+        final = Alerts.objects.count()
+        ic(final)
+        # TODO
+
+    # if request(f'ws://localhost:8000/alerts/?token={self.token}&x=xxx'):
+    #     self.fail('server is not runing')
 
     # async def test_is_auth(self):
     #     uri = f'ws://localhost:8000/alerts/?token={self.token}&x=xxx'

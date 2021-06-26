@@ -88,9 +88,11 @@ PyJWT = "==2.1.0"
 pyOpenSSL = "==20.0.1"
 PyYAML = "==5.4.1"
 Twisted = "==21.2.0"
-django = "*"
 channels-redis = "*"
 icecream = "*"
+factory-boy = "*"
+django = "*"
+
 [dev-packages]
 
 [requires]

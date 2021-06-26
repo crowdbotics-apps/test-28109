@@ -38,6 +38,15 @@ class UpdateSer(ModelSerializer):
 
 
 
+class UserSerForAddmin(DynamicSerializer):
+    email = serializers.EmailField(required=False)
+    usernam = serializers.EmailField(required=False)
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
+
 class UsersSerializer(DynamicSerializer):
     statistics = StaSer(many=True, read_only=True)
     patient_profile = patients.ModelSer(many=False, read_only=True)
@@ -53,7 +62,6 @@ class UpdateUsersSerializer(DynamicSerializer):
         fields = ["password",
                   "last_login",
                   "photo",
-                  "username",
                   "secon_email",
                   "first_name",
                   "last_name",

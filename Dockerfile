@@ -14,9 +14,7 @@ COPY . .
 RUN python3 -m pip install --upgrade pip
 
 RUN pip install pipenv
-#RUN pipenv install --deploy --system
-RUN pipenv install -r req.txt
-RUN pipenv install --skip-lock
+RUN pipenv install --deploy --system
 
 RUN python3 manage.py collectstatic --no-input
 
@@ -26,4 +24,5 @@ USER django
 #su - django
 #whoami
 #RUN chmod -R 777 /usr/lib/python3/dist-packages/
-CMD gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT && daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
+CMD daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
+#gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT &&
