@@ -231,7 +231,7 @@ EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'crowboticstest@gmail.com'
-EMAIL_HOST_PASSWORD = 'crowbotics123@1'
+EMAIL_HOST_PASSWORD = 'my@NewPassword'
 
 host = os.environ.get('REDIS_URL', 'redis://localhost:6379') if is_deploied else [
     ('127.0.0.1', 6379)]

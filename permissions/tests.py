@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from Functions.Permissions import get_permission_id
-from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
 from calendars.models import DateType
 from patients.models import Patient
@@ -118,7 +117,6 @@ class AuthTestings(APITestCase):
         userI = User.objects.get(id=2)
         res = self.client.put('/users/2/', {'username': 'updated', 'password': 'password', 'email': 'Alex@g.com'})
         userF = User.objects.get(id=2)
-        Debugging(res, color='green')
         # 4. test
         self.assertNotEqual(userI.username, userF.username)
         self.assertEqual(userI.email, userF.email)

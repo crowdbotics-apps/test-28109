@@ -6,7 +6,6 @@ from rest_framework.response import Response
 
 from Functions.DynamicSer import DynamicSerializer
 from Functions.MyViews import ItemView, ItemsView
-from Functions.debuging import Debugging
 from Functions.fields_lookups import fields_lookups
 from users.models import User
 from .Functions.Statstics import statistics
@@ -22,15 +21,23 @@ MyModel = Value
 class ColumnSer(DynamicSerializer):
     class Meta:
         model = Column
-        fields = ['name', 'user', ]
+        fields = ['name', 'user' ]
 
+
+class StaSer(DynamicSerializer):
+    class Meta:
+        model = Column
+        fields = ['name', 'values']
+        depth = 1
 
 class StatisticSer(DynamicSerializer):
-    column = ColumnSer(many=False, read_only=True, required=False)
+    # column = ColumnSer(many=False, read_only=True, required=False)
 
     class Meta:
         model = MyModel
-        fields = ['object_id','field_value', 'name', 'action', 'seen_by', 'date_created', 'column',]
+        # fields = ['object_id','field_value', 'name', 'action', 'seen_by', 'date_created', 'column',]
+        fields = '__all__'
+        depth = 1
 
 
 class Postser(DynamicSerializer):
@@ -39,6 +46,9 @@ class Postser(DynamicSerializer):
         fields = '__all__'
 
 
+
+
+# class StatsticsView(ItemsView):
 class StatsticsView(ItemsView):
     def get(self, request, *args, **kwargs):
         """
@@ -144,7 +154,7 @@ class StatsticsView(ItemsView):
                 'potential typo': 'Did you mean ' + str(words) + '?',
                 "note": "If you think you do not have a typo send {'sure' : 'true'} with the data."})
 
-        column, created = Column.objects.get_or_create(name=column, user=User.objects.get(id=1))
+        column, created = Column.objects.get_or_create(name=column['name'], user=User.objects.get(id=column['user']))
         request.data['column'] = column.id
         self.serializer_class = Postser
         return super().post(request, *args, **kwargs)

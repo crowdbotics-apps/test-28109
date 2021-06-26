@@ -1,27 +1,34 @@
-from django.urls import reverse
-from rest_framework import status
+from icecream import ic
 from rest_framework.test import APITestCase
 
-from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
-from email.message import EmailMessage
-
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
 # EMAIL_HOST_USER = 'crowboticstest@gmail.com'
 # EMAIL_HOST_PASSWORD = 'crowbotics123@1'
-from users.models import User
+from timesheets.models import Column, Value
 
 
 class AuthTestings(APITestCase):
-    # def setUp(self):
-        # tests_setup_function(self)
-    def test_verfy_email(self):
-        pass
-        # self.register_data['email'] = api.rondomeemail
-        # response = self.client.post('users/register/', self.register_data, format='json')
+    def setUp(self):
+        tests_setup_function(self)
 
-        # response = self.client.post('users/verify_email/', self.register_data, format='json')
+    def test_get_statstics(self):
+        col = Column.objects.create(name='Oxygen',user=self.user)
+        Value.objects.create(object_id='1',field_value='96%',column=col)
+        Value.objects.create(object_id='2', column=col)
+        res = self.client.get('/users/')
+        assert res.data[0]['statistics'][0]['name'] == 'Oxygen'
+        assert res.data[0]['statistics'][0]['values'][0]['object_id'] == '1'
+        assert res.data[0]['statistics'][0]['values'][0]['field_value'] == '96%'
+
+    # def test_get_patients(self):
+    #     res = self.client.get('/users/?groups__containse=patient', data={'format': 'json'})
+        # self.register_data['email'] = api.rondomeemail
+        # resonse = self.client.post('users/register/', self.register_data, format='json')
+
+        # resonse = self.client.post('users/verify_email/', self.register_data, format='json')
+
 
     # def test_api_jwt_and_permissions_and_users(self):
     #     assert User.objects.count() == 0
@@ -31,9 +38,9 @@ class AuthTestings(APITestCase):
     #     u.is_active = False
     #     u.save()
     #     #
-    #     resp = self.client.post(
+    #     res = self.client.post(
     #         self.login_url, self.login_data, format='json')
-    #     self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+    #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
     #     #
     #     u.is_active = True
     #     u.is_email_verified = True
@@ -41,36 +48,36 @@ class AuthTestings(APITestCase):
     #     u.save()
     #     #
     #     client = APIClient()
-    #     resp = client.post(
+    #     res = client.post(
     #         self.login_url, self.login_data, format='json')
-    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
-    #     self.assertTrue('access' in resp.data)
-    #     token = resp.data['access']
-    #     refresh_token = resp.data['refresh']
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     self.assertTrue('access' in res.data)
+    #     token = res.data['access']
+    #     refresh_token = res.data['refresh']
     #     #
     #     verification_url = '/users/token/verify/'
-    #     resp = self.client.post(
+    #     res = self.client.post(
     #         verification_url, {'token': token}, format='json')
-    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
     #     #
-    #     resp = self.client.post(
+    #     res = self.client.post(
     #         verification_url, {'token': 'abc'}, format='json')
-    #     self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+    #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
     #     #
     #     client = APIClient()
     #     client.credentials(HTTP_AUTHORIZATION='Bearer abc')
-    #     resp = client.get('/users/', data={'format': 'json'})
-    #     self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+    #     res = client.get('/users/', data={'format': 'json'})
+    #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
     #     client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-    #     resp = client.get('/users/')
-    #     self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
-    #     assert 'You are not permitted to view user' in str(resp.data['permission error'])
+    #     res = client.get('/users/')
+    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+    #     assert 'You are not permitted to view user' in str(res.data['permission error'])
     #     u.is_superuser = False
     #     u.is_staff = False
     #     u.save()
     #     #
-    #     resp = client.get('/users/')
-    #     self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+    #     res = client.get('/users/')
+    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
     #
     #     res = client.get('/users/1/')
     #     assert u.id == 1
@@ -83,14 +90,14 @@ class AuthTestings(APITestCase):
     #     u.user_permissions.add(
     #         get_permission_id('Can view user', User))
     #     u.save()
-    #     resp = client.get('/users/')
-    #     assert len(resp.data[0]) >= 20
-    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    #     res = client.get('/users/')
+    #     assert len(res.data[0]) >= 20
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
     #
-    #     resp = client.get('/users/1/')
-    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    #     res = client.get('/users/1/')
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
     #     #
     #     u.user_permissions.add(24)
     #     u.save()
-    #     resp = client.get('/users/')
-    #     assert len(resp.data[0]) >= 20
+    #     res = client.get('/users/')
+    #     assert len(res.data[0]) >= 20

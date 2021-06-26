@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from Functions.debuging import Debugging
 from Functions.queryset_filtering import queryset_filtering
 
 

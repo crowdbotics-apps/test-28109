@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from Functions.debuging import Debugging
 from users.models import User
 
 from colorama import Fore, Back

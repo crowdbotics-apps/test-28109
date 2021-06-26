@@ -7,10 +7,8 @@ from rest_framework.serializers import (
     ModelSerializer,
 )
 
-from Functions.DynamicSer import DynamicSerializer
-from patients.views import patients
-from timesheets.urls import StatisticSer
-from ..models import User, Availablity
+from ..models import User
+
 
 class PasswordSer(ModelSerializer):
     class Meta:

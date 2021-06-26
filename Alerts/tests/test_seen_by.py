@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
 
 

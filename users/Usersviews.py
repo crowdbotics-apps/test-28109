@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from Functions.MyViews import ItemView, ItemsView
 from Functions.Permissions import permision_chack, get_user_permissions
 ##
-from Functions.debuging import Debugging
 from users import serializers
 from .models import User
 
@@ -45,6 +44,9 @@ class UserView(ItemView):
         return super().put(*args,**kwargs)
 
 class UsersView(ItemsView):
+    """
+    Note: `domain.com/users/?groups__conainets=patient` to get all patients instead of all uses
+    """
     queryset = User.objects.all()
     serializer_class = serializers.UsersSerializer
     search_fields = '__all__'

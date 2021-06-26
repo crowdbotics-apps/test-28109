@@ -7,7 +7,6 @@ from django.conf import settings
 from rest_framework.test import APITestCase
 
 from Alerts.consumers import Alerts
-from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
 from calendars.models import DateType, Event
 from unittest import TestCase
@@ -24,24 +23,18 @@ class WebsocketTests(APITestCase):
     #     pass
     # def tearDown(self):
         # destroy_data
-        # Debugging(User.objects.all(), color='yellow')
 
     async def test_connect(self):
-        communicator = WebsocketCommunicator(Alerts.as_asgi(), self.url)
-        connected, subprotocol = await communicator.connect()
-        assert connected
-        await communicator.send_to(text_data="hello")
-        response = await communicator.receive_from()
-        Debugging(response, color='green')
-        await communicator.disconnect()
+        uri = f'ws://localhost:8000/alerts/?token={self.token2}&fields=username'
+        async with websockets.connect(uri) as websocket:
+            res = await websocket.recv()
+            assert res
 
     async def test_send(self):
-        communicator = WebsocketCommunicator(Alerts.as_asgi(), self.url)
-        connected, subprotocol = await communicator.connect()
-        await communicator.send_to(text_data="hello")
-        response = await communicator.receive_from()
-        await communicator.disconnect()
-
+        uri = f'ws://localhost:8000/alerts/?token={self.token2}&fields=username'
+        async with websockets.connect(uri) as websocket:
+            message = {"":""}
+            res = await websocket.send('message')
 
 class AlertsTests(APITestCase):
     def setUp(self):
@@ -87,6 +80,8 @@ class AlertsTests(APITestCase):
         obj3.users.set([self.user, self.user3])
         obj3.save()
         self.all_dates = Event.objects.all().count()
+        # if request(f'ws://localhost:8000/alerts/?token={self.token}&x=xxx'):
+        #     self.fail('server is not runing')
 
     async def test_is_auth(self):
         uri = f'ws://localhost:8000/alerts/?token={self.token}&x=xxx'
@@ -95,25 +90,21 @@ class AlertsTests(APITestCase):
             res = json.loads(res)
             # TODO
             # assert self.all_dates == len(res)
-            Debugging(res, color='green')
 
     async def test_can_see_only_own_data(self):
-        Debugging(self.user3, color='green')
         uri = f'ws://localhost:8000/alerts/?token={self.token3}'
         async with websockets.connect(uri) as websocket:
             res = await websocket.recv()
             res = json.loads(res)
 
             # TODO
-            # Debugging(res, color='green')
             # self.assertEqual(len(res), 1)
 
     async def test_fields_filter(self):
-        uri = f'ws://localhost:8000/alerts/?token={self.token1}&fields=username'
+        uri = f'ws://localhost:8000/alerts/?token={self.token2}&fields=username'
         async with websockets.connect(uri) as websocket:
             res = await websocket.recv()
             res = json.loads(res)
-
             # TODO
             # for i in res:
 
@@ -146,8 +137,7 @@ class AlertsTests(APITestCase):
         async with websockets.connect(uri) as websocket:
             res = await websocket.recv()
             res = json.loads(res)
-            Debugging(res, color='green')
-
+    # TODO
     def test_dates_notifcations(self):
         res = self.client.post('/calendars/', {
             "title": "first",

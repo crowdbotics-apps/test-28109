@@ -2,7 +2,6 @@
 from django.apps import AppConfig
 from django.db import models
 
-from Functions.debuging import Debugging
 from Functions.make_fields_permissions import make_fields_permissions
 
 
@@ -19,7 +18,7 @@ class YourAppConfig(AppConfig):
 
         try:
             # Dummy data
-            User.objects.get_or_create(username='ali',email='x@m.com',password='password',is_staff=True,is_active=True,is_superuser=True,is_email_verified=True,is_role_verified=True)
+            User.objects.get_or_create(username='ali',email='x@x.com',password='password',is_staff=True,is_active=True,is_superuser=True,is_email_verified=True,is_role_verified=True)
         except:
             print('=================== no migratoins yet ===================')
             pass

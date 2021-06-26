@@ -1,11 +1,8 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import signals
-from django.dispatch import receiver
 from safedelete.models import SafeDeleteModel
-from django.utils.translation import ugettext_lazy as _
+
 from patients.models import Patient, Symptom
-from users.models import User
 
 
 class Column(SafeDeleteModel):
@@ -20,7 +17,7 @@ class Column(SafeDeleteModel):
 class Value(SafeDeleteModel):
     object_id = models.CharField(max_length=20)
     name = models.CharField(max_length=50, blank=True)
-    column = models.ForeignKey(Column, related_name='column', on_delete=models.CASCADE)
+    column = models.ForeignKey(Column, related_name='values', on_delete=models.CASCADE)
     field_value = models.CharField(max_length=500)
     RCHOICES = (
         ('added', 'added'),

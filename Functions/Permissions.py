@@ -4,7 +4,6 @@ from colorama import Fore, Back
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
-from Functions.debuging import Debugging
 from Functions.make_fields_permissions import make_fields_permissions
 
 

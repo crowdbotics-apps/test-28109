@@ -1,6 +1,5 @@
 from django.db.models import Q
 
-from Functions.debuging import Debugging
 
 
 def queryset_filtering(model, queries):

@@ -4,7 +4,6 @@ import difflib
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from Functions.debuging import Debugging
 from Functions.tests_credentials import tests_setup_function
 from timesheets.models import Column, Value
 import pytz
@@ -79,6 +78,7 @@ class TestTimeSheets(APITestCase):
                                {
                                    "field_value": "22",
                                    "name": "ccc",
+                                   'object_id':'1',
                                    "action": "added",
                                    "seen_by": [1],
                                    "date_created": "2021-06-09T10:42:41.458057Z",
@@ -88,7 +88,7 @@ class TestTimeSheets(APITestCase):
                                    }
                                }
                                )
-        # self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_typos(self):
 

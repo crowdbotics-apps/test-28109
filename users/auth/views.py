@@ -1,3 +1,5 @@
+import re
+
 import jwt
 from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -9,6 +11,7 @@ from django.utils.encoding import smart_bytes
 from django.utils.http import urlsafe_base64_encode
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from icecream import ic
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,7 +20,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import UntypedToken
 
 ##
-from Functions.debuging import Debugging
 from . import serializers
 from ..models import User
 from ..utils import Util
@@ -36,13 +38,18 @@ class RegisterView(generics.GenericAPIView):
         token = RefreshToken.for_user(user).access_token
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
+
         link = 'http://' + current_site + relativeLink + "?token=" + str(token)
         email_body = render_to_string(
             "verify_email.html", {'name': user.username, 'link': link})
         data = {'email_body': email_body, 'to_email': user.email,
                 'email_subject': 'Verify your email'}
+
         Util.send_email(data)
         return Response(user_data, status=status.HTTP_201_CREATED)
+
+
+x = 'helo'
 
 
 class LoginView(generics.GenericAPIView):
@@ -73,6 +80,20 @@ class LoginView(generics.GenericAPIView):
             # TODO AttributeError: 'UsersSerializer' object has no attribute 'instance'
             'user': serializer.data
         })
+
+
+try:
+    user = User.objects.get(id=1)
+    token = RefreshToken.for_user(user).access_token
+    LoginView.post.__doc__ = f"""
+    - ## dummy login
+    - username = {user.username}
+    - password = {user.password}
+    - token = {str(token)}
+    """
+except:
+    ic('there are no migrations yet')
+
 
 
 class VerifyEmail(APIView):

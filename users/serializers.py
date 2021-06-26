@@ -4,9 +4,8 @@ from rest_framework.serializers import (
 )
 
 from Functions.DynamicSer import DynamicSerializer
-from Functions.debuging import Debugging
 from patients.views import patients
-from timesheets.urls import StatisticSer
+from timesheets.urls import StaSer
 from .models import User, Availablity
 
 
@@ -38,14 +37,14 @@ class UpdateSer(ModelSerializer):
         )
 
 
+
 class UsersSerializer(DynamicSerializer):
-    statistics = StatisticSer(many=True, read_only=True)
+    statistics = StaSer(many=True, read_only=True)
     patient_profile = patients.ModelSer(many=False, read_only=True)
 
     class Meta:
         model = User
-        fields = [*[x.name for x in User._meta.fields], 'events', 'statistics', 'patient_profile']
-        depth = 1
+        fields = [*[x.name for x in User._meta.fields], 'events', 'patient_profile','statistics']
 
 
 class UpdateUsersSerializer(DynamicSerializer):
