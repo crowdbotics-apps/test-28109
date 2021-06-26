@@ -12,8 +12,12 @@ RUN apt-get update \
 WORKDIR /opt/webapp
 COPY . .
 RUN python3 -m pip install --upgrade pip
+
 RUN pip install pipenv
-RUN pipenv install --deploy --system
+#RUN pipenv install --deploy --system
+RUN pipenv install -r req.txt
+RUN pipenv install --skip-lock
+
 RUN python3 manage.py collectstatic --no-input
 
 RUN adduser --disabled-password --gecos "" django

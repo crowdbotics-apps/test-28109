@@ -4,7 +4,6 @@ import factory
 from factory.django import DjangoModelFactory
 
 # from polls.models import Question as Poll
-from icecream import ic
 
 from calendars.models import Event, DateType
 from users.models import User
@@ -15,12 +14,10 @@ from django.db import transaction
 from django.core.management.base import BaseCommand
 
 
-NUM_USERS = 50
 NUM_CLUBS = 10
 NUM_THREADS = 12
 COMMENTS_PER_THREAD = 25
 USERS_PER_CLUB = 8
-
 
 class UserFactory(DjangoModelFactory):
     class Meta:
@@ -29,6 +26,7 @@ class UserFactory(DjangoModelFactory):
     username = factory.Faker("name")
     email = factory.Faker("email")
     password = factory.Faker("password")
+
 
 
 class DateTypeFacotry(DjangoModelFactory):
@@ -48,6 +46,7 @@ class EventFacotry(DjangoModelFactory):
     description = factory.Faker("sentence")
     date_type = factory.SubFactory(DateTypeFacotry)
     created_by = factory.SubFactory(UserFactory)
+
 
 
 def makeSuper(admin):
@@ -78,9 +77,16 @@ class Command(BaseCommand):
         self.stdout.write("Creating new data...")
         # Create all the users
         people = []
-        for _ in range(NUM_USERS):
+        for _ in range(25):
             person = UserFactory()
+            person.is_email_verified = True
+            person.is_role_verified = True
+            person.is_staff = random.choice([True,False])
+            person.save()
             people.append(person)
+
+        for _ in range(25):
+            UserFactory()
 
         # Add some users to clubs
         for _ in range(NUM_CLUBS):
@@ -90,13 +96,6 @@ class Command(BaseCommand):
         for _ in range(NUM_THREADS):
             creator = random.choice(people)
             thread = EventFacotry(created_by=creator)
-            # Create comments for each thread
-            # for _ in range(COMMENTS_PER_THREAD):
-            #     commentor = random.choice(people)
-            #     CommentFactory(
-            #         user=commentor,
-            #         thread=thread
-            #     )
 
 
 

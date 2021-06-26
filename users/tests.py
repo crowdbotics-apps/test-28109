@@ -1,4 +1,3 @@
-from icecream import ic
 from rest_framework.test import APITestCase
 
 from Functions.tests_credentials import tests_setup_function

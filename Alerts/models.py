@@ -7,7 +7,6 @@ from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models.signals import pre_save, m2m_changed, post_save
 from django.dispatch import receiver
-from icecream import ic
 from rest_framework import serializers
 from safedelete.models import SafeDeleteModel
 from safedelete.models import SafeDeleteModel

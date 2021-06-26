@@ -11,7 +11,6 @@ from django.utils.encoding import smart_bytes
 from django.utils.http import urlsafe_base64_encode
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from icecream import ic
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response

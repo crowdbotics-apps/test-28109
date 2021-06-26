@@ -90,7 +90,7 @@ PyYAML = "==5.4.1"
 Twisted = "==21.2.0"
 django = "*"
 channels-redis = "*"
-
+icecream = "*"
 [dev-packages]
 
 [requires]
