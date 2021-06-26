@@ -93,16 +93,16 @@ class AuthTestings(APITestCase):
         assert 'username' not in res.data[0]
 
     def test_if_can_change_then_can_view(self):
-        provider = Group.objects.get(name='doctor')
-        self.user.groups.add(provider)
+        # provider = Group.objects.get(name='doctor')
+        # self.user.groups.add(provider)
+        self.user.user_permissions.add(get_permission_id('Can view user', User))
         self.user.save()
-        resp = self.client.get('/users/')
-
-    # TODO  self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        res = self.client.get('/users/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_can_not_view_other_users(self):
         resp = self.client.get('/users/2/')
-        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)  # TODO
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_can_not_change(self):
         #0. can't update
@@ -168,12 +168,11 @@ class AuthTestings(APITestCase):
         res = self.client.put('/users/1/', {'username': 'Alex', 'password': 'password'})
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_staff_cannot_update_their_role(self):
+    #TODO def test_staff_cannot_update_their_role(self):
     #     self.user.is_staff = True
-    #     self.user.save()
-    # TODO   resp = self.client.put('/users/1/', {'is_superuser': 'true'})
-    #   Debugging(resp.data, color='blue')
-    #   self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+      #   self.user.save()
+      #   resp = self.client.put('/users/1/', {'is_superuser': 'true'})
+      # self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
     def test_can_view_relational_felds(self):
         data = {
             "title": "first",

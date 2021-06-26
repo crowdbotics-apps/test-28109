@@ -11,6 +11,7 @@ from django.utils.encoding import smart_bytes
 from django.utils.http import urlsafe_base64_encode
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from icecream import ic
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -80,20 +81,17 @@ class LoginView(generics.GenericAPIView):
             'user': serializer.data
         })
 
-
 try:
-    user = User.objects.get(id=1)
+    user = User.objects.get(username='ali')
     token = RefreshToken.for_user(user).access_token
     LoginView.post.__doc__ = f"""
     - ## dummy login
     - username = {user.username}
-    - password = {user.password}
+    - password = password
     - token = {str(token)}
-    """
+        """
 except:
     ic('there are no migrations yet')
-
-
 
 class VerifyEmail(APIView):
     serializer_class = serializers.EmailVerificationSerializer

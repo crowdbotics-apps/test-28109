@@ -1,9 +1,9 @@
 from django.conf.urls import url
 
-from .consumers import Alerts
+from .consumers import AlertsChannle
 from django.urls import path
 
 websocket_urlpatterns = [
-    path('alerts/', Alerts.as_asgi()),
+    path('alerts/', AlertsChannle.as_asgi()),
     # path('chat/', Chat.as_asgi())
 ]

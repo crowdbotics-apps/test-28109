@@ -29,7 +29,7 @@ class AlertsRules(SafeDeleteModel):
     model = models.CharField(max_length=30, help_text='Spsfy a model to moniter it')
     object_id = models.PositiveIntegerField(blank=True, null=True,
                                             help_text='if this blanck I will moniter all objects')
-    filter = models.CharField(max_length=30)
+    filter = models.CharField(max_length=30,help_text='example: "oxgyn__lt=80"')
     field = models.PositiveIntegerField(blank=True, null=True, help_text='if this blanck I will moniter all fields')
     field_value = models.CharField(max_length=30, null=True, blank=True,
                                    help_text='If field value equal/gte/contains... then I will alert you')

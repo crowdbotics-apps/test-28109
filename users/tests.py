@@ -1,3 +1,5 @@
+from rest_auth.tests.mixins import APIClient
+from rest_framework import status
 from rest_framework.test import APITestCase
 
 from Functions.tests_credentials import tests_setup_function
@@ -23,10 +25,10 @@ class AuthTestings(APITestCase):
 
     # def test_get_patients(self):
     #     res = self.client.get('/users/?groups__containse=patient', data={'format': 'json'})
-        # self.register_data['email'] = api.rondomeemail
-        # resonse = self.client.post('users/register/', self.register_data, format='json')
-
-        # resonse = self.client.post('users/verify_email/', self.register_data, format='json')
+    #     self.register_data['email'] = api.rondomeemail
+    #     resonse = self.client.post('users/register/', self.register_data, format='json')
+    #
+    #     resonse = self.client.post('users/verify_email/', self.register_data, format='json')
 
 
     # def test_api_jwt_and_permissions_and_users(self):
@@ -63,28 +65,22 @@ class AuthTestings(APITestCase):
     #         verification_url, {'token': 'abc'}, format='json')
     #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
     #     #
-    #     client = APIClient()
-    #     client.credentials(HTTP_AUTHORIZATION='Bearer abc')
-    #     res = client.get('/users/', data={'format': 'json'})
-    #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
-    #     client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-    #     res = client.get('/users/')
-    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-    #     assert 'You are not permitted to view user' in str(res.data['permission error'])
-    #     u.is_superuser = False
-    #     u.is_staff = False
-    #     u.save()
-    #     #
-    #     res = client.get('/users/')
-    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-    #
-    #     res = client.get('/users/1/')
-    #     assert u.id == 1
-    #     self.assertEqual(res.status_code, status.HTTP_200_OK) # TODO
-    #
+    def test_is_owner(self):
+        self.user.is_superuser = False
+        self.user.is_staff = False
+        self.user.save()
+        #
+        res = self.client.get('/users/')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        assert 'You are not permitted to view user' in str(res.data['permission error'])
+        #
+        res = self.client.get('/users/1/')
+        assert self.user.id == 1
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
     #     u.user_permissions.add(
     #         get_permission_id('Can view username', User))
-    #     u.save()
+    #     u.save() #TODO test permission
     #     #
     #     u.user_permissions.add(
     #         get_permission_id('Can view user', User))

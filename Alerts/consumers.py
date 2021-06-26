@@ -21,35 +21,35 @@ class AlertsSer(QueryFieldsMixin, serializers.ModelSerializer):
         # depth = 1
 
 
-def return_notifcations(scope):
-    user = scope.get('user')
-    queries = scope['query_string']
-    queries = parse_qs(queries.decode("utf8"))
-    for i in queries.keys():
-        queries[i] = queries[i][0]
-
-    alerts = queryset_filtering(Alerts, queries)
-    # if user:
-    #     if not user.is_staff or not user.is_superuser:
-    #         users = users.filter(id=user.id)
-    serializer = AlertsSer(alerts, many=True)
-    return json.dumps(serializer.data)
 
 
 
-class Alerts(WebsocketConsumer):
+class AlertsChannle(WebsocketConsumer):
     def connect(self):
+        queries = self.scope['query_string']
+        queries = parse_qs(queries.decode("utf8"))
+        for i in queries.keys():
+            queries[i] = queries[i][0]
 
         self.accept()
         user = self.scope.get('user')
+        self.send(user.username+' is connected.')
+        # if user:
+        #     if not user.is_staff or not user.is_superuser:
+        #         users = users.filter(id=user.id)
+        alerts = queryset_filtering(Alerts, queries)
+        serializer = AlertsSer(alerts, many=True)
+        self.send(json.dumps(serializer.data))
 
-        if not user:
-            self.send('You are not authenticated')
-            super().disconnect(self)
-
+        # if not user:
+        #     self.send('You are not authenticated')
+        #     super().disconnect(self)
+        #
         @receiver(post_save, sender=Alerts)
-        def __init__(sender, instance, **kwargs):
-            self.send(return_notifcations(elf.scope))
+        def __init__(sender, created,instance, **kwargs):
+            if created:
+                serializer = AlertsSer(Alerts.objects.get(id=instance.id), many=False)
+                self.send(json.dumps(serializer.data))
 
     def receive(self, text_data):
         errors = []
