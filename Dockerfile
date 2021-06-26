@@ -21,8 +21,5 @@ RUN python3 manage.py collectstatic --no-input
 RUN adduser --disabled-password --gecos "" django
 USER django
 
-#su - django
-#whoami
-#RUN chmod -R 777 /usr/lib/python3/dist-packages/
 CMD daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
 #gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT &&
