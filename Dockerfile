@@ -11,7 +11,7 @@ RUN apt-get update \
 
 WORKDIR /opt/webapp
 COPY . .
-#RUN pip install -r requirements.txt
+RUN python3 -m pip install --upgrade pip
 RUN pip install pipenv
 RUN pipenv install --deploy --system
 RUN python3 manage.py collectstatic --no-input
