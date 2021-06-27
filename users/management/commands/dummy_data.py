@@ -1,11 +1,13 @@
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand, CommandError
 import factory
 from factory.django import DjangoModelFactory
 
 # from polls.models import Question as Poll
-
+from Functions.Permissions import get_permission_id
 from calendars.models import Event, DateType
+from patients.models import Patient
 from users.models import User
 
 import random
@@ -65,11 +67,33 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
 
+
+
         self.stdout.write("Deleting old data...")
-        models = [User,Event,DateType]
+        models = [User,Event,DateType, Group]
 
         for m in models:
             m.objects.all().delete()
+
+        # Create groups
+        groups = []
+        Patients = Group.objects.create(name='Patients')
+
+        groups.append(Patients)
+        Doctors = Group.objects.create(name='Doctors')
+        Doctors.permissions.add(get_permission_id('Can view user', User))
+        Doctors.permissions.add(get_permission_id('Can view patient', Patient))
+        Doctors.permissions.add(get_permission_id('Can change patient', Patient))
+        Doctors.save()
+
+        groups.append(Doctors)
+        providers = Group.objects.create(name='providers')
+        Patients.permissions.add(get_permission_id('Can view user', User))
+        Patients.permissions.add(get_permission_id('Can change user', User))
+        Patients.permissions.add(get_permission_id('Can view patient', Patient))
+        Patients.permissions.add(get_permission_id('Can change patient', Patient))
+        Patients.save()
+        groups.append(providers)
 
         admin = User.objects.create_superuser(email='ali@g.com', username='ali', password='password')
         makeSuper(admin)
@@ -79,6 +103,7 @@ class Command(BaseCommand):
         people = []
         for _ in range(25):
             person = UserFactory()
+            person.groups.add(random.choice(groups))
             person.is_email_verified = True
             person.is_role_verified = True
             person.is_staff = random.choice([True,False])
@@ -96,6 +121,8 @@ class Command(BaseCommand):
         for _ in range(NUM_THREADS):
             creator = random.choice(people)
             thread = EventFacotry(created_by=creator)
+
+
 
 
 
