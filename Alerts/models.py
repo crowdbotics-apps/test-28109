@@ -30,8 +30,8 @@ class AlertsRules(SafeDeleteModel):
     model = models.CharField(max_length=30, help_text='Spsfy a model to moniter it')
     object_id = models.PositiveIntegerField(blank=True, null=True,
                                             help_text='if this blanck I will moniter all objects')
-    filter = models.CharField(max_length=30,help_text='example: "oxgyn__lt=80"')
-    field = models.PositiveIntegerField(blank=True, null=True, help_text='if this blanck I will moniter all fields')
+    filter = models.CharField(max_length=30,help_text='example: "oxgyn__lt=80"',blank=True,null=True)
+    field = models.CharField(max_length=55,blank=True, null=True, help_text='if this blanck I will moniter all fields')
     field_value = models.CharField(max_length=30, null=True, blank=True,
                                    help_text='If field value equal/gte/contains... then I will alert you')
     users = models.ManyToManyField(User, related_name='rule_alert_target_users', blank=True)
@@ -48,6 +48,8 @@ class Alerts(SafeDeleteModel):
     groups = models.ManyToManyField(Group, related_name='alert_target_groups', blank=True)
     date_updated = models.DateTimeField(auto_now=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    class Meta:
+        get_latest_by = 'date_created'
 
 
 class SeeAlert(SafeDeleteModel):

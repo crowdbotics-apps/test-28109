@@ -54,3 +54,10 @@ class PatientsAppTests(APITestCase):
     #        })
     #     assert len(res.data['symptoms']) == 2
     #     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+    def test_symptoms_hsitroy(self):
+        res = self.client.get('/patient/')
+        # TODO
+        # res.data[0]['symtoms_hisotyr'][0]['name']
+        # res.data[0]['symtoms_hisotyr'][0]['date_created']
+

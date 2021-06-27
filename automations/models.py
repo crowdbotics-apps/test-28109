@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Permission
-# from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
@@ -13,12 +12,14 @@ def get_actions(name):
 
 
 class Automation(models.Model):
+    from django.contrib.contenttypes.models import ContentType
+
     tag_name = models.SlugField()
     if_item = models.CharField(choices=(
         ('user.change_username', 'user | change username'),), max_length=50, blank=True)
     if_ction = models.CharField(choices=(
         ('user.change_username', 'user | change username'),), max_length=50, blank=True)
-    # then_item = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    then_item = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     then_action = models.CharField(choices=(
         ('user.change_username', 'user | change username'),), max_length=50, blank=True)
     then_set_value = models.CharField(choices=(

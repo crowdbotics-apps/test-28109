@@ -21,5 +21,5 @@ RUN python3 manage.py collectstatic --no-input
 RUN adduser --disabled-password --gecos "" django
 USER django
 
-#CMD daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
-CMD gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT
+CMD daphne test_28109.asgi:application --port $PORT --bind 0.0.0.0
+#CMD gunicorn test_28109.wsgi:application  --bind 0.0.0.0:$PORT

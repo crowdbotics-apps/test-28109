@@ -5,6 +5,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from drf_queryfields import QueryFieldsMixin
+from icecream import ic
 from rest_framework import serializers
 
 from Alerts.models import Alerts
@@ -26,25 +27,29 @@ class AlertsSer(QueryFieldsMixin, serializers.ModelSerializer):
 
 class AlertsChannle(WebsocketConsumer):
     def connect(self):
+        self.accept()
+        user = self.scope.get('user')
+        try:
+            self.send(user.username + ' is connected.')
+        except:
+            self.send(user)
+            self.disconnect()
+
+
         queries = self.scope['query_string']
         queries = parse_qs(queries.decode("utf8"))
         for i in queries.keys():
             queries[i] = queries[i][0]
 
-        self.accept()
-        user = self.scope.get('user')
-        self.send(user.username+' is connected.')
+
         # if user:
         #     if not user.is_staff or not user.is_superuser:
         #         users = users.filter(id=user.id)
         alerts = queryset_filtering(Alerts, queries)
         serializer = AlertsSer(alerts, many=True)
+
         self.send(json.dumps(serializer.data))
 
-        # if not user:
-        #     self.send('You are not authenticated')
-        #     super().disconnect(self)
-        #
         @receiver(post_save, sender=Alerts)
         def __init__(sender, created,instance, **kwargs):
             if created:

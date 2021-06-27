@@ -81,7 +81,7 @@ class Religion(models.Model):
     name = models.CharField(max_length=50, blank=True)
 
 class SymptomsHistory(SafeDeleteModel):
-    symptom = models.OneToOneField(Symptom,on_delete=models.DO_NOTHING)
+    symptom = models.ManyToManyField(Symptom)
     date_created = models.DateTimeField(auto_now_add=True)
 #TODO     make it easy to create in serializer
 # TODO make spaling check
